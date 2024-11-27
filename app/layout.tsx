@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import TitleBar from './components/title-bar';
 
 export const metadata: Metadata = {
   title: 'Flip Cards',
@@ -13,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <TitleBar />
+        <main className="flex-1">{children}</main>
+      </body>
     </html>
   );
 }

@@ -11,6 +11,7 @@
     "init-db": "ts-node app/scripts/init-db.ts"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
