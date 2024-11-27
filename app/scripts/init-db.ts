@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-// scripts/init-db.ts
-const mongoose = require('mongoose');
-const { config } = require('dotenv');
-const path = require('path');
-const userSchema = require('../app/models/User').default;
-const topicSchema = require('../app/models/Topic').default;
-const chapterSchema = require('../app/models/Chapter').default;
+import mongoose from 'mongoose';
+import { config } from 'dotenv';
+import path from 'path';
+import { userSchema } from '../models/User';
+import { topicSchema } from '../models/Topic';
+import { chapterSchema } from '../models/Chapter';
 
 // Load environment variables
 config({

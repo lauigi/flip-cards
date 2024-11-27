@@ -10,7 +10,7 @@ export interface ITopic {
   updatedAt: Date;
 }
 
-const topicSchema = new mongoose.Schema(
+export const topicSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     summary: { type: String, required: false },

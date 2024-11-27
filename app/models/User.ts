@@ -10,7 +10,7 @@ export interface IUser {
   updatedAt: Date;
 }
 
-const userSchema = new mongoose.Schema(
+export const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
