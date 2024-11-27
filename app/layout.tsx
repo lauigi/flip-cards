@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { SessionProvider } from 'next-auth/react';
 import './globals.css';
 import TitleBar from './components/title-bar';
 
@@ -15,8 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <TitleBar />
-        <main className="flex-1">{children}</main>
+        <SessionProvider>
+          <TitleBar />
+          <main className="flex-1">{children}</main>
+        </SessionProvider>
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 import { FC } from 'react';
 import Logo from './Logo';
 import Title from './Title';
+import UserButton from './UserButton';
 
 const TitleBar: FC = () => {
   return (
@@ -11,7 +12,7 @@ const TitleBar: FC = () => {
         <Logo />
         <Title />
       </div>
-      <div>user name here</div>
+      <UserButton />
     </header>
   );
 };
