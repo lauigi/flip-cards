@@ -8,7 +8,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/app/components/ui/dropdown-menu';
 
 const UserButton: FC = () => {
   const { data: session } = useSession();
