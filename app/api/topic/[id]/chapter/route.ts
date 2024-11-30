@@ -28,6 +28,7 @@ export async function POST(request: NextRequest, context: { params: { id: string
     const chapter = new Chapter({
       name: newChapterData.name,
       summary: newChapterData.summary,
+      longerSummary: newChapterData.longerSummary,
       topicId: topicId,
       cards: newChapterData.cards || {},
     });

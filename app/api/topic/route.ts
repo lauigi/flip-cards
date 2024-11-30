@@ -25,16 +25,18 @@ export async function POST(request: NextRequest, context: { params: { id: string
     const savedTopic = await topic.save();
     // Update user's topics array
     await User.findOneAndUpdate({ email }, { $push: { topics: savedTopic._id } });
-    const newChapterData = JSON.parse(topicData.chapters[0]);
-    const chapter = new Chapter({
-      name: newChapterData.name,
-      summary: newChapterData.summary,
-      topicId: savedTopic._id,
-      cards: newChapterData.cards || [],
-    });
-    const savedChapter = await chapter.save();
-    // Update topic's chapters array
-    await Topic.findByIdAndUpdate(savedTopic._id, { $push: { chapters: savedChapter._id } });
+    if (topicData.chapters.length > 0) {
+      const newChapterData = JSON.parse(topicData.chapters[0]);
+      const chapter = new Chapter({
+        name: newChapterData.name,
+        summary: newChapterData.summary,
+        topicId: savedTopic._id,
+        cards: newChapterData.cards || [],
+      });
+      const savedChapter = await chapter.save();
+      // Update topic's chapters array
+      await Topic.findByIdAndUpdate(savedTopic._id, { $push: { chapters: savedChapter._id } });
+    }
     return NextResponse.json({
       topicId: savedTopic._id,
       message: 'Topic created successfully',

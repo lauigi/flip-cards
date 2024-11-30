@@ -12,6 +12,7 @@ export interface IChapter {
   _id: mongoose.Types.ObjectId;
   name: string;
   summary: string;
+  longerSummary: string;
   topicId: mongoose.Types.ObjectId;
   cards: ICard[];
   createdAt: Date;

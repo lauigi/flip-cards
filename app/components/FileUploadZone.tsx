@@ -93,7 +93,7 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch('/api/import-ai', {
+      const response = await fetch('/api/import', {
         method: 'POST',
         body: formData,
       });

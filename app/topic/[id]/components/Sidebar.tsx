@@ -68,7 +68,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
     formData.append('file', file);
 
     try {
-      const response = await fetch('/api/import-ai', {
+      const response = await fetch('/api/import', {
         method: 'POST',
         body: formData,
       });
@@ -179,40 +179,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
     <aside
       className="sidebar-container h-full bg-white border-r-2 border-gray-200/80 
       overflow-y-auto shadow-[inset_-1px_0_0_rgba(0,0,0,0.05)] flex flex-col relative w-80">
-      {/* Level card at top */}
       <div className="sticky top-0 bg-white z-10 p-4 border-b border-gray-100">
-        <div className="rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden">
-          <div className="p-4 space-y-4">
-            {/* Level badge with number */}
-            <div className="flex items-center gap-3">
-              <div
-                className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F97316] to-[#FDBA74] 
-                flex items-center justify-center text-white font-bold text-xl shadow-md">
-                1
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-medium text-gray-900">Lvl 1: Noob</h3>
-                <p className="text-xs text-gray-500">Keep learning to level up!</p>
-              </div>
-            </div>
-
-            {/* Experience bar */}
-            <div className="space-y-1.5">
-              <div className="flex justify-between items-center text-xs text-gray-600">
-                <span>Experience</span>
-                <span>0 / 50 XP</span>
-              </div>
-              <div className="w-full bg-gray-200/70 rounded-lg h-2.5 overflow-hidden">
-                <div
-                  className="bg-gradient-to-r from-[#F97316] to-[#FDBA74] h-full rounded-lg 
-                    transition-all duration-300 ease-out"
-                  style={{ width: '0%' }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div className="mb-8 text-center mt-4">
           <p className="text-sm text-gray-600">
             {course.chapters.length} {course.chapters.length === 1 ? 'Chapter' : 'Chapters'}

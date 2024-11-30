@@ -131,30 +131,32 @@ export function UploadSuccessModal({ isOpen, onClose, allowNewTopic, newChapterD
           </div>
 
           {/* Create New Topic */}
-          {allowNewTopic && (<div className="space-y-3">
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                checked={mode === 'new'}
-                onChange={() => setMode('new')}
-                className="w-4 h-4 text-[#F97316] focus:ring-[#F97316] border-gray-300"
-              />
-              <span className="ml-2 text-[#1A1C1E] font-medium">Create New Topic</span>
-            </label>
+          {allowNewTopic && (
+            <div className="space-y-3">
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  checked={mode === 'new'}
+                  onChange={() => setMode('new')}
+                  className="w-4 h-4 text-[#F97316] focus:ring-[#F97316] border-gray-300"
+                />
+                <span className="ml-2 text-[#1A1C1E] font-medium">Create New Topic</span>
+              </label>
 
-            {mode === 'new' && (
-              <input
-                type="text"
-                value={newTopicName}
-                onChange={e => setNewTopicName(e.target.value)}
-                placeholder="Enter topic name"
-                className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg
+              {mode === 'new' && (
+                <input
+                  type="text"
+                  value={newTopicName}
+                  onChange={e => setNewTopicName(e.target.value)}
+                  placeholder="Enter topic name"
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg
                          text-gray-700 text-sm focus:ring-2 focus:ring-[#F97316]/20
                          focus:border-[#F97316] hover:border-[#F97316]
                          transition-colors duration-200"
-              />
-            )}
-          </div>)}
+                />
+              )}
+            </div>
+          )}
         </div>
 
         {/* Modal Footer */}
@@ -168,9 +170,7 @@ export function UploadSuccessModal({ isOpen, onClose, allowNewTopic, newChapterD
           </button>
           <button
             onClick={handleSubmit}
-            disabled={
-              isSubmitting || (mode === 'existing' && !selectedTopicId) || (mode === 'new' && !newTopicName)
-            }
+            disabled={isSubmitting || (mode === 'existing' && !selectedTopicId) || (mode === 'new' && !newTopicName)}
             className="px-4 py-2.5 bg-[#F97316] text-white rounded-lg text-sm font-medium
                      hover:bg-[#EA580C] transition-colors duration-200 shadow-sm
                      disabled:opacity-50 disabled:cursor-not-allowed">
