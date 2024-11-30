@@ -3,15 +3,15 @@ import connect from '@/lib/mongodb';
 import Topic from '@/models/Topic';
 
 interface Props {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export async function GET(request: Request, context: Props) {
   try {
     await connect();
-    const topicId = await context.params.id;
+    const topicId = await (await context.params).id;
     const topic = await Topic.findById(topicId);
 
     if (!topic) {

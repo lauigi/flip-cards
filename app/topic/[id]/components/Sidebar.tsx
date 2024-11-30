@@ -76,7 +76,8 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
 
       if (!response.ok) throw new Error('Upload failed');
 
-      const data = await response.json();
+      const data = await response.text();
+      console.log('Uploaded content:', data, typeof data);
       // Add to existing topic
       const updateResponse = await fetch(`/api/topic/${selectedTopicId}/chapter`, {
         method: 'POST',
@@ -98,6 +99,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
         className: 'bg-[#F97316] text-white',
         duration: 1000,
       });
+      setTimeout(() => location.reload(), 1000);
     } catch (error) {
       console.error('Error uploading file:', error);
       toast({
@@ -113,7 +115,6 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
       fileInputRef.current.value = '';
     }
     setIsUploading(false);
-    setTimeout(() => location.reload(), 1000);
   };
 
   const handleRenameChapter = async (chapterId: string, newName: string) => {

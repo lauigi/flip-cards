@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import connect from '@/lib/mongodb';
 import Chapter from '@/models/Chapter';
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     await connect();
     const { name } = await request.json();
@@ -19,7 +20,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     await connect();
     const chapter = await Chapter.findByIdAndDelete(params.id);
