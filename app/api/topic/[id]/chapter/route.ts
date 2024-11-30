@@ -21,6 +21,7 @@ export async function POST(request: NextRequest, context: { params: { id: string
       return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
     }
     const rawReqData = await req.text();
+    console.log('Chapter data:', rawReqData);
     let newChapterData = JSON.parse(rawReqData);
     if (typeof newChapterData === 'string') {
       newChapterData = JSON.parse(newChapterData);

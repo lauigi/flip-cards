@@ -8,11 +8,11 @@ interface Props {
   };
 }
 
-export async function GET(request: Request, { params }: Props) {
+export async function GET(request: Request, context: Props) {
   try {
     await connect();
-
-    const topic = await Topic.findById(params.id);
+    const topicId = await context.params.id;
+    const topic = await Topic.findById(topicId);
 
     if (!topic) {
       return NextResponse.json({ error: 'Topic not found' }, { status: 404 });

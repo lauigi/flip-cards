@@ -66,6 +66,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('topicId', selectedTopicId as string);
 
     try {
       const response = await fetch('/api/import', {

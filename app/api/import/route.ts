@@ -4,6 +4,9 @@ import { anthropic } from '@ai-sdk/anthropic';
 import { generateObject } from 'ai';
 import { z } from 'zod';
 import { FILE_SIZE_LIMIT, FILE_SIZE_LIMIT_WORDING } from '@/lib/config';
+import connect from '@/lib/mongodb';
+import Topic from '@/models/Topic';
+import { IChapter } from '@/models/Chapter';
 
 // some config for vercel
 export const maxDuration = 120;
@@ -30,14 +33,30 @@ export const POST = auth(async function POST(req) {
   } else {
     email = req.auth.user!.email as string;
   }
+  await connect();
   const formData: FormData = await req.formData();
-  const backgrounds = formData.get('backgrounds') as string;
-  const previousFeedback = formData.get('previousFeedback') as string;
+  const topicId = formData.get('topicId') as string;
+  const topic = await Topic.findById(topicId).populate('chapters');
+  if (!topic) {
+    return NextResponse.json({ message: 'Topic not found' }, { status: 404 });
+  }
+  let backgrounds = '';
+  let previousFeedback = '';
+  (topic.chapters as IChapter[]).forEach(({ name, longerSummary, cards }, index) => {
+    backgrounds += `Chapter ${index + 1}: name is ${name}, content is ${longerSummary}\n\n`;
+    cards.forEach(({ question, answer, isRemoved, rate }) => {
+      if (!isRemoved && rate !== 3) {
+        previousFeedback += `{Q: ${question} [from chapter ${index + 1}], A: ${answer}, Rate: ${rate}}\n`;
+      }
+    });
+  });
   const uploadedFiles = formData.getAll('file');
   if (uploadedFiles && uploadedFiles.length > 0) {
     const uploadedFile = uploadedFiles[0];
     console.log('Uploaded file:', uploadedFile);
     console.log('user email:', email);
+    console.log('user backgrounds:', backgrounds);
+    console.log('user feedback:', previousFeedback);
 
     // Check if uploadedFile is of type File
     if (uploadedFile instanceof File) {
@@ -86,7 +105,7 @@ in the meantime, please consider the topic's background and the user's previous 
               {
                 type: 'text',
                 text: previousFeedback
-                  ? `Here is some feedback of mine as an array of ratings to some previous questions and answers. rate 1 means a very useless Q&A, rate 5 means a very useful Q&A, you should adjust your output accordingly: ${previousFeedback}`
+                  ? `Here is some feedback of mine as a group of ratings to some previous questions and answers. rate 1 means a very useless Q&A, rate 5 means a very useful Q&A, you should adjust your output accordingly: ${previousFeedback}`
                   : 'No additional feedback provided.',
               },
             ],
