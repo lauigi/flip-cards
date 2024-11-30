@@ -1,16 +1,12 @@
-import User from '@/app/models/User';
-import { auth } from '@/libs/auth';
-import connect from '@/libs/mongodb';
+import User from '@/models/User';
+import { auth } from '@/lib/auth';
+import connect from '@/lib/mongodb';
 import { NextResponse } from 'next/server';
 
 export const GET = auth(async function GET(req) {
   let email = '';
   if (!req.auth) {
-    if (process.env.NODE_ENV === 'development') {
-      email = 'demo@example.com';
-    } else {
-      return NextResponse.json([]);
-    }
+    return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
   } else {
     email = req.auth.user!.email as string;
   }

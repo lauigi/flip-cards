@@ -5,7 +5,7 @@ import { UploadSuccessModal } from './UploadSuccessModal';
 import { IChapter } from '../models/Chapter';
 import { useSession } from 'next-auth/react';
 import { useToast } from '@/hooks/use-toast';
-import { FILE_SIZE_LIMIT, FILE_SIZE_LIMIT_WORDING } from '@/libs/config';
+import { FILE_SIZE_LIMIT, FILE_SIZE_LIMIT_WORDING } from '@/lib/config';
 
 interface Props {
   onUploadSuccess?: (file: { id: string; filename: string; url: string }) => void;
@@ -122,13 +122,12 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
 
   return (
     <>
-      <div className="w-full max-w-3xl mx-auto p-6">
+      <div className="p-6 w-full">
         <div
           className={`
             relative border-2 border-dashed rounded-lg p-8
             flex flex-col items-center justify-center
-            cursor-pointer
-            min-h-[300px] bg-white
+            cursor-pointer bg-white
             ${isDragging ? 'border-[#F97316]' : 'border-gray-300'}
           `}
           onClick={handleAddChapter}
@@ -163,7 +162,7 @@ export function FileUploadZone({ onUploadSuccess }: Props) {
           {isUploading && (
             <div className="absolute bottom-4 left-4 right-4">
               <div className="w-full bg-gray-200 rounded-full h-1.5">
-                <div className="h-1.5 rounded-full bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 animate-gradient-x bg-[length:200%_100%]" />
+                <div className="h-1.5 rounded-full bg-gradient-to-r from-orange-600 via-yellow-300 to-orange-600 animate-gradient-x bg-[length:200%_100%]" />
               </div>
             </div>
           )}

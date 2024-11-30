@@ -1,6 +1,6 @@
 'use client';
 
-import { IChapter } from '@/app/models/Chapter';
+import { IChapter } from '@/models/Chapter';
 import { useState, useEffect } from 'react';
 
 interface CardSectionProps {

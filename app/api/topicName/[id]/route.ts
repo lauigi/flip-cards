@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import connect from '@/libs/mongodb';
-import Topic from '@/app/models/Topic';
+import connect from '@/lib/mongodb';
+import Topic from '@/models/Topic';
 
 interface Props {
   params: {

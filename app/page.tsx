@@ -7,22 +7,17 @@ export default function Home() {
     <main className="min-h-screen bg-[#F0F2F5]">
       {/* Top Navigation Bar */}
       <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="container mx-auto px-6 py-5">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-[#1A1C1E] font-serif">Flipping Cards</h1>
-            <p className="text-gray-600 text-base mt-2 font-sans">Flipping, Flipping and Flipping!</p>
+        <div className="container mx-auto px-3 pt-3 pb-1">
+          {/* File Upload Area */}
+          <div className="mb-12 flex items-center">
+            <h2 className="text-2xl font-semibold mb-4 shrink-0 text-[#1A1C1E] font-serif">Upload Your Document</h2>
+            <FileUploadZone />
           </div>
         </div>
       </div>
 
       {/* Main Content Area */}
       <div className="container mx-auto px-6 py-10">
-        {/* File Upload Area */}
-        <div className="mb-12 text-center">
-          <h2 className="text-2xl font-semibold mb-4 text-[#1A1C1E] font-serif">Upload Your World</h2>
-          <FileUploadZone />
-        </div>
-
         {/* Course List */}
         <div className="text-center">
           <h2 className="text-2xl font-semibold mb-6 text-[#1A1C1E] font-serif">Collection Gallery</h2>

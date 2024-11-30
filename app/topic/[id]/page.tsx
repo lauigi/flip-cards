@@ -1,8 +1,8 @@
-import Topic from '@/app/models/Topic';
+import Topic from '@/models/Topic';
 import TopicContent from './components/TopicContent';
 import { notFound } from 'next/navigation';
-import connect from '@/libs/mongodb';
-import { IChapter } from '@/app/models/Chapter';
+import connect from '@/lib/mongodb';
+import { IChapter } from '@/models/Chapter';
 
 async function getTopicWithChapters(id: string) {
   try {

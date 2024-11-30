@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import connect from '@/libs/mongodb';
-import Chapter from '@/app/models/Chapter';
+import connect from '@/lib/mongodb';
+import Chapter from '@/models/Chapter';
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   try {

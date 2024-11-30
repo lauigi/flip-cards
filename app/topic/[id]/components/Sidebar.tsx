@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import ChapterList from './ChapterList';
 import { useParams } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import { FILE_SIZE_LIMIT, FILE_SIZE_LIMIT_WORDING } from '@/libs/config';
+import { FILE_SIZE_LIMIT, FILE_SIZE_LIMIT_WORDING } from '@/lib/config';
 
 interface Course {
   id: string;
@@ -225,11 +225,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
           onClick={handleAddChapter}
           disabled={isUploading}
           className={`w-full mb-4 px-4 py-2 text-sm border rounded-lg
-            ${
-              isUploading
-                ? 'text-gray-400 border-gray-400 cursor-not-allowed bg-gradient-to-r from-gray-100 to-gray-50 animate-pulse'
-                : 'text-[#F97316] border-[#F97316] hover:bg-[#F97316]/5 transition-colors duration-200'
-            }`}>
+            ${isUploading ? 'text-gray-400 border-gray-400 cursor-not-allowed bg-gradient-to-r from-gray-100 to-gray-50 animate-pulse' : 'text-[#F97316] border-[#F97316] hover:bg-[#F97316]/5 transition-colors duration-200'}`}>
           {isUploading ? 'Adding Chapter...' : '+ Add Chapter'}
         </button>
       </div>

@@ -1,19 +1,15 @@
-import Chapter from '@/app/models/Chapter';
-import Topic from '@/app/models/Topic';
-import User from '@/app/models/User';
-import { auth } from '@/libs/auth';
-import connect from '@/libs/mongodb';
+import Chapter from '@/models/Chapter';
+import Topic from '@/models/Topic';
+import User from '@/models/User';
+import { auth } from '@/lib/auth';
+import connect from '@/lib/mongodb';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest, context: { params: { id: string } }) {
   return auth(async req => {
     let email = '';
     if (!req.auth) {
-      if (process.env.NODE_ENV === 'development') {
-        email = 'demo@example.com';
-      } else {
-        return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
-      }
+      return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
     } else {
       email = req.auth.user!.email as string;
     }

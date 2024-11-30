@@ -1,7 +1,7 @@
 import TopicModel from '../models/Topic';
 import { TopicCard } from './TopicCard';
-import connect from '@/libs/mongodb';
-import { auth } from '@/libs/auth';
+import connect from '@/lib/mongodb';
+import { auth } from '@/lib/auth';
 import User, { IUser } from '../models/User';
 import { LoginButton } from './LoginButton';
 
