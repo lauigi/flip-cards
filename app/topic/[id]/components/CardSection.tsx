@@ -43,10 +43,16 @@ export default function CardSection({ cards = [], chapter }: CardSectionProps) {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ isRemoved: true }),
       });
 
-      if (!response.ok) throw new Error('Failed to remove card');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to remove card');
+      }
+
+      setLocalCards(prevCards => prevCards.map(card => (card.id === cardId ? { ...card, isRemoved: true } : card)));
 
       toast({
         title: 'Success',
@@ -54,13 +60,11 @@ export default function CardSection({ cards = [], chapter }: CardSectionProps) {
         variant: 'default',
         className: 'bg-[#F97316] text-white',
       });
-
-      window.location.reload();
     } catch (error) {
-      console.error('Error delete card:', error);
+      console.error('Error removing card:', error instanceof Error ? error.message : error);
       toast({
         title: 'Error',
-        description: 'Failed to remove card',
+        description: error instanceof Error ? error.message : 'Failed to remove card',
         variant: 'destructive',
       });
     }
@@ -73,10 +77,14 @@ export default function CardSection({ cards = [], chapter }: CardSectionProps) {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({ rate }),
       });
 
-      if (!response.ok) throw new Error('Failed to rate card');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to rate card');
+      }
 
       setLocalCards(prevCards => prevCards.map(card => (card.id === cardId ? { ...card, rate } : card)));
 
@@ -87,10 +95,10 @@ export default function CardSection({ cards = [], chapter }: CardSectionProps) {
         className: 'bg-[#F97316] text-white',
       });
     } catch (error) {
-      console.error('Error rating card:', error);
+      console.error('Error rating card:', error instanceof Error ? error.message : error);
       toast({
         title: 'Error',
-        description: 'Failed to rate card',
+        description: error instanceof Error ? error.message : 'Failed to rate card',
         variant: 'destructive',
       });
     }

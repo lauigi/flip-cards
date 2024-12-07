@@ -1,59 +1,84 @@
 import { NextResponse } from 'next/server';
 import connect from '@/lib/mongodb';
 import Chapter from '@/models/Chapter';
+import User from '@/models/User';
+import { auth } from '@/lib/auth';
 import { NextRequest } from 'next/server';
+import type { ICard } from '@/models/Chapter';
 
-export async function PATCH(request: NextRequest, props: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
+    // Get auth session
+    const session = await auth();
+    if (!session?.user?.email) {
+      return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
+    }
+
     await connect();
 
-    // 查找包含该卡片的章节
-    const chapter = await Chapter.findOne({ 'cards.id': props.params.id });
-    if (!chapter) {
+    // First find all chapters that contain this card
+    const chapters = await Chapter.find({ 'cards.id': params.id });
+    if (!chapters || chapters.length === 0) {
       return NextResponse.json({ error: 'Card not found' }, { status: 404 });
+    }
+
+    // Get the specific chapter that contains this card
+    const chapter = chapters[0]; // Take the first chapter since card IDs should be unique
+    const card = chapter.cards.find((c: ICard) => c.id === params.id);
+    if (!card) {
+      return NextResponse.json({ error: 'Card not found in chapter' }, { status: 404 });
+    }
+
+    // Check user permission
+    const user = await User.findOne({ email: session.user.email });
+    if (!user || !user.topics || !user.topics.includes(chapter.topicId)) {
+      console.log('Permission denied:', {
+        user: user?._id,
+        topics: user?.topics,
+        chapterTopicId: chapter.topicId,
+      });
+      return NextResponse.json({ message: 'Not authorized to modify this card' }, { status: 403 });
     }
 
     const { rate, isRemoved } = await request.json();
 
-    // 验证评分参数
-    if (rate !== undefined) {
-      if (!Number.isInteger(rate) || rate < 1 || rate > 5) {
-        return NextResponse.json({ error: 'Rate must be an integer between 1 and 5' }, { status: 400 });
-      }
+    // Validate rating parameter
+    if (rate !== undefined && (!Number.isInteger(rate) || rate < 1 || rate > 5)) {
+      return NextResponse.json({ error: 'Rate must be an integer between 1 and 5' }, { status: 400 });
     }
 
-    // 验证删除参数
+    // Validate removal parameter
     if (isRemoved !== undefined && typeof isRemoved !== 'boolean') {
       return NextResponse.json({ error: 'isRemoved must be a boolean value' }, { status: 400 });
     }
 
-    // 构建更新对象
+    // Build update object
     const updateFields: Record<string, number | boolean> = {};
     if (rate !== undefined) updateFields['cards.$.rate'] = rate;
     if (isRemoved !== undefined) updateFields['cards.$.isRemoved'] = isRemoved;
 
-    // 验证是否有要更新的字段
+    // Validate if there are fields to update
     if (Object.keys(updateFields).length === 0) {
       return NextResponse.json({ error: 'No valid fields to update' }, { status: 400 });
     }
 
-    // 更新卡片
+    console.log('Updating card:', params.id, 'in chapter:', chapter._id, 'with fields:', updateFields);
+
+    // Update the card
     const updatedChapter = await Chapter.findOneAndUpdate(
-      { 'cards.id': props.params.id },
+      { _id: chapter._id, 'cards.id': params.id },
       { $set: updateFields },
       { new: true, runValidators: true },
     );
-
-    // 添加调试日志
-    console.log('Update Fields:', updateFields);
-    console.log('Updated Chapter:', updatedChapter);
 
     if (!updatedChapter) {
       return NextResponse.json({ error: 'Failed to update card' }, { status: 500 });
     }
 
-    // 获取更新后的卡片信息
-    const updatedCard = updatedChapter.cards.find((card: { id: string }) => card.id === props.params.id);
+    // Get the updated card information
+    const updatedCard = updatedChapter.cards.find((c: ICard) => c.id === params.id);
+
+    console.log('Updated card:', updatedCard);
 
     return NextResponse.json({
       message: 'Card updated successfully',
