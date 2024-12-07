@@ -3,6 +3,8 @@ import TopicContent from './components/TopicContent';
 import { notFound } from 'next/navigation';
 import connect from '@/lib/mongodb';
 import { IChapter } from '@/models/Chapter';
+import { auth } from '@/lib/auth';
+import User from '@/models/User';
 
 async function getTopicWithChapters(id: string) {
   try {
@@ -16,8 +18,22 @@ async function getTopicWithChapters(id: string) {
   }
 }
 
+async function hasAuthorization(email: string, topicId: string) {
+  try {
+    await connect();
+    const userTopics = await User.findOne({ email });
+    return userTopics.topics.includes(topicId);
+  } catch (error) {
+    console.error('Error checking authorization:', error);
+    return false;
+  }
+}
+
 export default async function TopicPage({ params }: { params: Promise<{ id: string }> }) {
+  const session = await auth();
+  if (!session?.user?.email) return notFound();
   const { id } = await params;
+  if (!(await hasAuthorization(session!.user!.email!, id))) return notFound();
   const topic = await getTopicWithChapters(id);
 
   const courseData = {

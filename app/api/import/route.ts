@@ -1,5 +1,5 @@
 import { auth } from '@/lib/auth';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { anthropic } from '@ai-sdk/anthropic';
 import { generateObject } from 'ai';
 import { z } from 'zod';
@@ -26,12 +26,13 @@ const resultSchema = z.object({
   ),
 });
 
-export const POST = auth(async function POST(req) {
+export const POST = async function (req: NextRequest) {
   let email = '';
-  if (!req.auth) {
+  const session = await auth();
+  if (!session?.user?.email) {
     return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
   } else {
-    email = req.auth.user!.email as string;
+    email = session.user!.email as string;
   }
   await connect();
   const formData: FormData = await req.formData();
@@ -117,4 +118,4 @@ in the meantime, please consider the topic's background and the user's previous 
     }
   }
   return NextResponse.json({ message: 'internal error' }, { status: 500 });
-});
+};

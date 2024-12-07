@@ -3,14 +3,15 @@ import { auth } from '@/lib/auth';
 import connect from '@/lib/mongodb';
 import { NextResponse } from 'next/server';
 
-export const GET = auth(async function GET(req) {
+export const GET = async function () {
   let email = '';
-  if (!req.auth) {
+  const session = await auth();
+  if (!session) {
     return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
   } else {
-    email = req.auth.user!.email as string;
+    email = session.user!.email as string;
   }
   await connect();
   const user = await User.findOne({ email }).populate('topics');
   return NextResponse.json(user.topics);
-});
+};

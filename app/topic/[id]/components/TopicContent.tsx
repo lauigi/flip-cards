@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Sidebar from './Sidebar';
 import CardSection from './CardSection';
+import { ICard } from '@/models/Chapter';
 
 interface TopicContentProps {
   course: {
@@ -13,11 +14,7 @@ interface TopicContentProps {
       id: string;
       name: string;
       summary: string;
-      cards: {
-        id: string;
-        question: string;
-        answer: string;
-      }[];
+      cards: ICard[];
     }[];
   };
 }

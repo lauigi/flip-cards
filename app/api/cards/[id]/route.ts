@@ -6,14 +6,14 @@ import { auth } from '@/lib/auth';
 import { NextRequest } from 'next/server';
 import type { ICard } from '@/models/Chapter';
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
     // Get auth session
     const session = await auth();
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
     }
-
+    const params = await props.params;
     await connect();
 
     // First find all chapters that contain this card
