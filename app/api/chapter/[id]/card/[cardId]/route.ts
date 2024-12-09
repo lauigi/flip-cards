@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connect from '@/lib/mongodb';
-import Chapter, { ICard } from '@/models/Chapter';
+import Chapter, { ICard, IChapter } from '@/models/Chapter';
 import { auth } from '@/lib/auth';
 import User from '@/models/User';
 
@@ -15,7 +15,7 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
   }
   try {
     await connect();
-    const chapter = await Chapter.findOne({ _id: params.id });
+    const chapter = (await Chapter.findOne({ _id: params.id }).lean()) as unknown as IChapter;
     if (!chapter) {
       return NextResponse.json({ error: 'Chapter not found' }, { status: 404 });
     }
@@ -26,6 +26,7 @@ export async function PATCH(request: Request, props: { params: Promise<{ id: str
 
     const { rate, isRemoved } = await request.json();
     const newCards = chapter.cards.map((card: ICard) => {
+      console.log('card.id:', card.id, 'params.cardId:', params.cardId);
       if (card.id === params.cardId) {
         return { ...card, ...(rate && { rate }), isRemoved: !!isRemoved };
       }

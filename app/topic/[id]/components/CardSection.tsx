@@ -118,10 +118,7 @@ export default function CardSection({ cards = [], chapter }: CardSectionProps) {
     <div>
       <div className="flex flex-col space-y-2 mb-8">
         <h3 className="text-lg font-medium text-gray-600">{chapter.name}</h3>
-        <h2
-          className={`font-serif text-[#1A1C1E] ${
-            chapter.summary.length > 100 ? 'text-xl' : 'text-2xl'
-          } leading-relaxed`}>
+        <h2 className={`text-[#1A1C1E] ${chapter.summary.length > 100 ? 'text-xl' : 'text-2xl'} leading-relaxed`}>
           {chapter.summary}
         </h2>
       </div>
@@ -177,9 +174,7 @@ export default function CardSection({ cards = [], chapter }: CardSectionProps) {
                     className="h-full p-6 bg-white rounded-2xl border border-gray-100 shadow-sm 
                               hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
                     <div className="flex flex-col h-full">
-                      <h3 className="text-2xl font-serif text-[#1A1C1E] mb-4 leading-relaxed tracking-wide">
-                        {card.question}
-                      </h3>
+                      <h3 className="text-xl text-[#1A1C1E] mb-4 leading-relaxed tracking-wide">{card.question}</h3>
                       <div className="mt-auto flex items-center justify-center text-sm text-gray-500">
                         <span className="flex items-center gap-2">
                           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

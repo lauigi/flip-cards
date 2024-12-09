@@ -42,17 +42,8 @@ export const POST = async function (req: NextRequest) {
     return NextResponse.json({ message: 'Topic not found' }, { status: 404 });
   }
   let backgrounds = '';
-  let previousFeedback = '';
-  (topic.chapters as IChapter[]).forEach(({ name, longerSummary, cards }, index) => {
+  (topic.chapters as IChapter[]).forEach(({ name, longerSummary }, index) => {
     backgrounds += `Chapter ${index + 1}: name is ${name}, content is ${longerSummary}\n\n`;
-    cards.forEach(({ question, answer, isRemoved, rate }) => {
-      if (isRemoved) {
-        previousFeedback += `{Q: ${question} [from chapter ${index + 1}], A: ${answer}, Feedback: totally useless\n`;
-      }
-      if (!isRemoved && rate !== 3) {
-        previousFeedback += `{Q: ${question} [from chapter ${index + 1}], A: ${answer}, Rate: ${rate}}\n`;
-      }
-    });
   });
   const uploadedFiles = formData.getAll('file');
   if (uploadedFiles && uploadedFiles.length > 0) {
@@ -60,7 +51,6 @@ export const POST = async function (req: NextRequest) {
     console.log('Uploaded file:', uploadedFile);
     console.log('user email:', email);
     console.log('user backgrounds:', backgrounds);
-    console.log('user feedback:', previousFeedback);
 
     // Check if uploadedFile is of type File
     if (uploadedFile instanceof File) {
@@ -105,12 +95,6 @@ in the meantime, please consider the topic's background and the user's previous 
                 text: backgrounds
                   ? `Here is the background of this topic, it contains some previous chapter of the same course. I list them below: ${backgrounds}`
                   : 'No additional background information provided.',
-              },
-              {
-                type: 'text',
-                text: previousFeedback
-                  ? `Here is some feedback of mine as a group of ratings to some previous questions and answers. rate 1 means a very useless Q&A, rate 5 means a very useful Q&A, you should adjust your output accordingly: ${previousFeedback}`
-                  : 'No additional feedback provided.',
               },
             ],
           },

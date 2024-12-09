@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import ChapterList from './ChapterList';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { FILE_SIZE_LIMIT, FILE_SIZE_LIMIT_WORDING } from '@/lib/config';
 
@@ -27,8 +27,16 @@ interface SidebarProps {
   onChapterSelect: (chapterId: string | null) => void;
 }
 
+const EXP_API_MAP = {
+  '0': '/api/import',
+  '1': '/api/import-no-bg',
+  '2': '/api/import-no-fb',
+  '3': '/api/import-control',
+};
+
 export default function Sidebar({ course, selectedChapterId, onChapterSelect }: SidebarProps) {
   const { id: selectedTopicId } = useParams();
+  const searchParams = useSearchParams();
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -67,9 +75,9 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
     const formData = new FormData();
     formData.append('file', file);
     formData.append('topicId', selectedTopicId as string);
-
+    const expType = searchParams.get('exp') || '0';
     try {
-      const response = await fetch('/api/import', {
+      const response = await fetch(EXP_API_MAP[expType as keyof typeof EXP_API_MAP], {
         method: 'POST',
         body: formData,
       });

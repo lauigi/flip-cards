@@ -41,10 +41,8 @@ export const POST = async function (req: NextRequest) {
   if (!topic) {
     return NextResponse.json({ message: 'Topic not found' }, { status: 404 });
   }
-  let backgrounds = '';
   let previousFeedback = '';
-  (topic.chapters as IChapter[]).forEach(({ name, longerSummary, cards }, index) => {
-    backgrounds += `Chapter ${index + 1}: name is ${name}, content is ${longerSummary}\n\n`;
+  (topic.chapters as IChapter[]).forEach(({ cards }, index) => {
     cards.forEach(({ question, answer, isRemoved, rate }) => {
       if (isRemoved) {
         previousFeedback += `{Q: ${question} [from chapter ${index + 1}], A: ${answer}, Feedback: totally useless\n`;
@@ -59,7 +57,6 @@ export const POST = async function (req: NextRequest) {
     const uploadedFile = uploadedFiles[0];
     console.log('Uploaded file:', uploadedFile);
     console.log('user email:', email);
-    console.log('user backgrounds:', backgrounds);
     console.log('user feedback:', previousFeedback);
 
     // Check if uploadedFile is of type File
@@ -99,12 +96,6 @@ in the meantime, please consider the topic's background and the user's previous 
                 type: 'file',
                 data: fileBuffer,
                 mimeType: 'application/pdf',
-              },
-              {
-                type: 'text',
-                text: backgrounds
-                  ? `Here is the background of this topic, it contains some previous chapter of the same course. I list them below: ${backgrounds}`
-                  : 'No additional background information provided.',
               },
               {
                 type: 'text',

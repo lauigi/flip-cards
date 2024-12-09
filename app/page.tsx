@@ -9,7 +9,7 @@ export default async function Home() {
     <main className="min-h-screen bg-[#F0F2F5]">
       {/* Top Navigation Bar */}
       <div className="bg-white shadow-sm border-b border-gray-200 px-3 py-3 flex items-center justify-between ">
-        <h2 className="flex-grow-0 text-2xl font-semibold text-[#1A1C1E] font-serif">Course Gallery</h2>
+        <h2 className="flex-grow-0 text-2xl font-semibold text-[#1A1C1E]">Course Gallery</h2>
         {session && <NewTopicButton />}
       </div>
 
