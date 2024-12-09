@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import CardSection from './CardSection';
 import { ICard } from '@/models/Chapter';
+import { useParams, useRouter } from 'next/navigation';
 
 interface TopicContentProps {
   course: {
@@ -17,13 +18,17 @@ interface TopicContentProps {
       cards: ICard[];
     }[];
   };
+  chapterId?: string;
 }
 
-export default function TopicContent({ course }: TopicContentProps) {
-  const [selectedChapterId, setSelectedChapterId] = useState<string | null>(course.chapters[0]?.id || null);
-  const [isChanging, setIsChanging] = useState(false);
+export default function TopicContent({ course, chapterId }: TopicContentProps) {
+  const selectedChapterId = chapterId || course.chapters[0]?.id || null;
+  const [isChanging, setIsChanging] = useState(true);
   const [direction, setDirection] = useState<'left' | 'right'>('right');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const router = useRouter();
+  const params = useParams();
+  const topicId = params.ids![0];
 
   const selectedChapter = course.chapters.find(chapter => chapter.id === selectedChapterId);
 
@@ -34,18 +39,17 @@ export default function TopicContent({ course }: TopicContentProps) {
     const newIndex = course.chapters.findIndex(chapter => chapter.id === chapterId);
 
     setDirection(newIndex > currentIndex ? 'left' : 'right');
-    setIsChanging(true);
 
-    setTimeout(() => {
-      setSelectedChapterId(chapterId);
-      setIsChanging(false);
-    }, 300);
+    router.push(`/topic/${topicId}/${chapterId || ''}`);
 
     // 在小屏幕上选择章节后自动关闭侧边栏
     if (window.innerWidth < 768) {
       setIsSidebarOpen(false);
     }
   };
+  useEffect(() => {
+    setIsChanging(false);
+  }, [chapterId]);
 
   return (
     <div className="flex h-[calc(100vh-64px)] bg-gray-50">

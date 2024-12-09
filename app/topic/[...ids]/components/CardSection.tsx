@@ -130,7 +130,7 @@ export default function CardSection({ cards = [], chapter }: CardSectionProps) {
             <div
               key={card.id}
               onClick={() => handleCardFlip(card.id)}
-              className="relative h-56 w-full max-w-sm mx-auto cursor-pointer group"
+              className="relative h-[240px] w-full max-w-sm mx-auto cursor-pointer group"
               style={{ perspective: '1000px' }}>
               <div className="absolute top-2 right-2 z-10" onClick={e => e.stopPropagation()}>
                 <DropdownMenu>
@@ -165,15 +165,15 @@ export default function CardSection({ cards = [], chapter }: CardSectionProps) {
               </div>
 
               <div
-                className={`absolute inset-0 w-full h-full transition-transform duration-500 
+                className={`inset-0 w-full transition-transform duration-500 
                          [transform-style:preserve-3d]
                          ${flippedCardId === card.id ? '[transform:rotateY(180deg)]' : ''}`}>
                 {/* Front of card */}
-                <div className="absolute inset-0 w-full h-full [backface-visibility:hidden]">
+                <div className="inset-0 w-full [backface-visibility:hidden]">
                   <div
-                    className="h-full p-6 bg-white rounded-2xl border border-gray-100 shadow-sm 
+                    className="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm 
                               hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
-                    <div className="flex flex-col h-full">
+                    <div className="flex flex-col">
                       <h3 className="text-xl text-[#1A1C1E] mb-4 leading-relaxed tracking-wide">{card.question}</h3>
                       <div className="mt-auto flex items-center justify-center text-sm text-gray-500">
                         <span className="flex items-center gap-2">
@@ -193,11 +193,11 @@ export default function CardSection({ cards = [], chapter }: CardSectionProps) {
                 </div>
 
                 {/* Back of card */}
-                <div className="absolute inset-0 w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)]">
+                <div className="absolute inset-0 w-full [backface-visibility:hidden] [transform:rotateY(180deg)]">
                   <div
-                    className="h-full p-6 bg-gradient-to-br from-[#f4d03f] to-[#e9bc4f] text-gray-800 rounded-2xl shadow-sm 
+                    className="p-6 bg-gradient-to-br from-[#f4d03f] to-[#e9bc4f] text-gray-800 rounded-2xl shadow-sm 
                   hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
-                    <div className="flex flex-col h-full">
+                    <div className="flex flex-col">
                       <p className="text-lg font-medium leading-tight">{card.answer}</p>
                     </div>
                   </div>

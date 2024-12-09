@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import ChapterList from './ChapterList';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { FILE_SIZE_LIMIT, FILE_SIZE_LIMIT_WORDING } from '@/lib/config';
 
@@ -40,6 +40,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleAddChapter = () => {
     if (isUploading) return;
@@ -107,7 +108,9 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
         className: 'bg-[#F97316] text-white',
         duration: 1000,
       });
-      setTimeout(() => location.reload(), 1000);
+      const result = await updateResponse.json();
+      console.log('New chapter added:', result);
+      router.push(`/topic/${selectedTopicId}/${result.chapterId}`);
     } catch (error) {
       console.error('Error uploading file:', error);
       toast({

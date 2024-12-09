@@ -29,12 +29,13 @@ async function hasAuthorization(email: string, topicId: string) {
   }
 }
 
-export default async function TopicPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function TopicPage({ params }: { params: Promise<{ ids: string }> }) {
   const session = await auth();
   if (!session?.user?.email) return notFound();
-  const { id } = await params;
-  if (!(await hasAuthorization(session!.user!.email!, id))) return notFound();
-  const topic = await getTopicWithChapters(id);
+  const { ids } = await params;
+  const [topicId, chapterId] = ids;
+  if (!(await hasAuthorization(session!.user!.email!, topicId))) return notFound();
+  const topic = await getTopicWithChapters(topicId);
 
   const courseData = {
     id: topic!._id,
@@ -48,5 +49,5 @@ export default async function TopicPage({ params }: { params: Promise<{ id: stri
     })),
   };
 
-  return <TopicContent course={courseData} />;
+  return <TopicContent course={courseData} chapterId={chapterId} />;
 }

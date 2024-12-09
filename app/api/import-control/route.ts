@@ -8,7 +8,7 @@ import connect from '@/lib/mongodb';
 import Topic from '@/models/Topic';
 
 // some config for vercel
-export const maxDuration = 180;
+export const maxDuration = 300;
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
