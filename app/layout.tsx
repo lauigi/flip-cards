@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import './globals.css';
 import TitleBar from './components/title-bar';
+import { Toaster } from './components/ui/toaster';
 
 export const metadata: Metadata = {
   title: 'Flip Cards',
@@ -20,6 +21,7 @@ export default function RootLayout({
           <TitleBar />
           <main className="flex-1">{children}</main>
         </SessionProvider>
+        <Toaster />
       </body>
     </html>
   );

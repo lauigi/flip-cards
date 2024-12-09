@@ -119,7 +119,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
 
   const handleRenameChapter = async (chapterId: string, newName: string) => {
     try {
-      const response = await fetch(`/api/chapters/${chapterId}`, {
+      const response = await fetch(`/api/chapter/${chapterId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -151,7 +151,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
 
   const handleDeleteChapter = async (chapterId: string) => {
     try {
-      const response = await fetch(`/api/chapters/${chapterId}`, {
+      const response = await fetch(`/api/chapter/${chapterId}`, {
         method: 'DELETE',
       });
 

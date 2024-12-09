@@ -7,8 +7,6 @@ if (!process.env.MONGODB_URI) {
 const uri = process.env.MONGODB_URI;
 const options = {
   appName: `flip-cards.${process.env.NODE_ENV === 'production' ? 'prod' : 'dev'}`,
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
 };
 
 export interface GlobalWithMongoose {
@@ -33,7 +31,9 @@ async function connect() {
   }
 
   if (!global.mongoose.promise) {
-    global.mongoose.promise = mongoose.connect(uri, options);
+    global.mongoose.promise = mongoose.connect(uri, options).then(mongoose => {
+      return mongoose;
+    });
   }
 
   try {

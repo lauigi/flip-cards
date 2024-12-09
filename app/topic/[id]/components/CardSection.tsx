@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 interface CardSectionProps {
   cards: IChapter['cards'];
   chapter: {
+    id: string;
     name: string;
     summary: string;
   };
@@ -38,7 +39,7 @@ export default function CardSection({ cards = [], chapter }: CardSectionProps) {
 
   const handleRemoveCard = async (cardId: string) => {
     try {
-      const response = await fetch(`/api/cards/${cardId}`, {
+      const response = await fetch(`/api/chapter/${chapter.id}/card/${cardId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +73,7 @@ export default function CardSection({ cards = [], chapter }: CardSectionProps) {
 
   const handleRate = async (cardId: string, rate: number) => {
     try {
-      const response = await fetch(`/api/cards/${cardId}`, {
+      const response = await fetch(`/api/chapter/${chapter.id}/card/${cardId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

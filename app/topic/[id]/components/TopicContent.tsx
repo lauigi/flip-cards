@@ -99,6 +99,7 @@ export default function TopicContent({ course }: TopicContentProps) {
                 <CardSection
                   cards={selectedChapter.cards}
                   chapter={{
+                    id: selectedChapter.id,
                     name: selectedChapter.name,
                     summary: selectedChapter.summary,
                   }}

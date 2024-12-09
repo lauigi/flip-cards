@@ -48,6 +48,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async session({ session }) {
       const { email } = session.user;
+      await connect();
       const existingUser = (await User.findOne({ email: email })) as IUser;
       if (!existingUser) {
         return session;

@@ -1,4 +1,4 @@
-import TopicModel from '../models/Topic';
+import type { ITopic } from '../models/Topic';
 import { TopicCard } from './TopicCard';
 import connect from '@/lib/mongodb';
 import { auth } from '@/lib/auth';
@@ -8,17 +8,9 @@ import { LoginButton } from './LoginButton';
 async function getTopics(email: string) {
   try {
     await connect();
-    // Find user and their topic IDs
-    const user = await User.findOne({ email }).select('topics').lean();
-    const topicIds = (user as unknown as Partial<IUser>)?.topics || [];
-    if (!topicIds.length) {
-      return [];
-    }
-    // Fetch full topic details for all user's topics
-    const topics = await TopicModel.find({
-      _id: { $in: topicIds },
-    }).lean();
-    return topics.map(topic => JSON.parse(JSON.stringify(topic)));
+    const user = await User.findOne({ email }).lean().populate('topics');
+    const topics = ((user as Partial<IUser>)?.topics as unknown as (ITopic & { _id: string })[]) || [];
+    return topics;
   } catch (error) {
     console.error('Error fetching topics:', error);
     throw error;
@@ -28,13 +20,7 @@ async function getTopics(email: string) {
 export async function CourseGrid() {
   try {
     const session = await auth();
-    let email = session?.user?.email;
-    if (!email) {
-      if (process.env.NODE_ENV === 'development') {
-        email = 'demo@example.com';
-      }
-    }
-    const topics = email ? await getTopics(email) : [];
+    const email = session?.user?.email;
 
     if (!email) {
       return (
@@ -42,7 +28,10 @@ export async function CourseGrid() {
           <LoginButton />
         </div>
       );
-    } else if (!topics || topics.length === 0) {
+    }
+
+    const topics = await getTopics(email);
+    if (!topics || topics.length === 0) {
       return (
         <div className="p-4 text-center">
           <p className="text-gray-500">No topics found.</p>
@@ -57,7 +46,7 @@ export async function CourseGrid() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {topics.map(topic => (
-            <TopicCard key={topic._id as string} topic={topic} />
+            <TopicCard key={topic._id} topic={topic} />
           ))}
         </div>
       </>
