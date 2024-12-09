@@ -35,7 +35,8 @@ const EXP_API_MAP = {
 };
 
 export default function Sidebar({ course, selectedChapterId, onChapterSelect }: SidebarProps) {
-  const { id: selectedTopicId } = useParams();
+  const params = useParams();
+  const [selectedTopicId] = params.ids as string[];
   const searchParams = useSearchParams();
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
