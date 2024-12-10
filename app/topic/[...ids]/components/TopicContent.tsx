@@ -42,7 +42,6 @@ export default function TopicContent({ course, chapterId }: TopicContentProps) {
 
     router.push(`/topic/${topicId}/${chapterId || ''}`);
 
-    // 在小屏幕上选择章节后自动关闭侧边栏
     if (window.innerWidth < 768) {
       setIsSidebarOpen(false);
     }
@@ -53,7 +52,6 @@ export default function TopicContent({ course, chapterId }: TopicContentProps) {
 
   return (
     <div className="flex h-[calc(100vh-64px)] bg-gray-50">
-      {/* 侧边栏切换按钮 */}
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         className="md:hidden fixed top-30 left-3 z-50 p-2 bg-white rounded-lg shadow-md">
@@ -67,7 +65,6 @@ export default function TopicContent({ course, chapterId }: TopicContentProps) {
         </svg>
       </button>
 
-      {/* 响应式侧边栏 */}
       <div
         className={`
           fixed md:relative z-40
@@ -79,12 +76,10 @@ export default function TopicContent({ course, chapterId }: TopicContentProps) {
         <Sidebar course={course} selectedChapterId={selectedChapterId} onChapterSelect={handleChapterSelect} />
       </div>
 
-      {/* 遮罩层 */}
       {isSidebarOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden" onClick={() => setIsSidebarOpen(false)} />
       )}
 
-      {/* 主内容区域 */}
       <div className="flex-1 overflow-auto">
         <div className="container mx-auto px-4 md:px-6 py-8">
           <div className="mb-6">

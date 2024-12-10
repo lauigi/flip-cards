@@ -25,7 +25,7 @@ const Title: FC = () => {
   const pathname = usePathname();
   const [topicName, setTopicName] = useState('');
   const isInTopicPage = pathname.includes('/topic/');
-  const [topicId] = params.ids as string[];
+  const topicId = params.ids ? params.ids[0] : '';
   useEffect(() => {
     if (isInTopicPage) {
       fetchTopicName(topicId).then(name => {

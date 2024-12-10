@@ -36,7 +36,7 @@ const EXP_API_MAP = {
 
 export default function Sidebar({ course, selectedChapterId, onChapterSelect }: SidebarProps) {
   const params = useParams();
-  const [selectedTopicId] = params.ids as string[];
+  const selectedTopicId = params.ids![0];
   const searchParams = useSearchParams();
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -141,7 +141,6 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
 
       if (!response.ok) throw new Error('Failed to rename chapter');
 
-      // 重新加载页面以获取最新数据
       location.reload();
 
       toast({
@@ -169,8 +168,7 @@ export default function Sidebar({ course, selectedChapterId, onChapterSelect }: 
 
       if (!response.ok) throw new Error('Failed to delete chapter');
 
-      // 重新加载页面以获取最新数据
-      location.reload();
+      router.replace(`/topic/${selectedTopicId}`);
 
       toast({
         title: 'Success!',

@@ -47,7 +47,7 @@ export async function DELETE(request: Request, props: { params: Promise<{ id: st
   }
   try {
     await connect();
-    const chapter = await Chapter.findOne({ _id: params.id });
+    const chapter = await Chapter.findById(params.id);
     if (!chapter) {
       return NextResponse.json({ error: 'Chapter not found' }, { status: 404 });
     }
@@ -56,8 +56,7 @@ export async function DELETE(request: Request, props: { params: Promise<{ id: st
       return NextResponse.json({ message: 'Not authenticated' }, { status: 401 });
     }
 
-    const { name } = await request.json();
-    const updatedChapter = await Chapter.findByIdAndUpdate(params.id, { name }, { new: true });
+    const updatedChapter = await Chapter.findByIdAndDelete(params.id);
     if (!updatedChapter) {
       return NextResponse.json({ error: 'Chapter not found' }, { status: 404 });
     }
